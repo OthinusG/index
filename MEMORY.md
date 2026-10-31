@@ -16,6 +16,9 @@
 - GitHub Actions builds with Node 24, runs `astro check`, builds, and deploys the `dist/` artifact.
 - GitHub Pages source must be `GitHub Actions`.
 - Remote repository: `https://github.com/OthinusG/index.git`.
+- GitHub Pages has not been enabled yet. Workflow run `41173101316` failed at `Configure Pages` with `Resource not accessible by integration`; the workflow token cannot create the initial Pages site.
+- Required fix: repository Settings -> Pages -> Build and deployment -> Source = GitHub Actions, then rerun the workflow. No code change is needed.
+- Verified locally: `npm run check` passes, production build succeeds, and all routes/assets work under `http://127.0.0.1:4321/index/`.
 
 ## External resources
 
