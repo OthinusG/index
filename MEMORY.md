@@ -17,9 +17,10 @@
 - The workflow also runs daily at 01:17 UTC (09:17 Asia/Shanghai) to rebuild and redeploy the site.
 - GitHub Pages source must be `GitHub Actions`.
 - Remote repository: `https://github.com/OthinusG/index.git`.
-- GitHub Pages has not been enabled yet. Workflow run `41173101316` failed at `Configure Pages` with `Resource not accessible by integration`; the workflow token cannot create the initial Pages site.
-- Required fix: repository Settings -> Pages -> Build and deployment -> Source = GitHub Actions, then rerun the workflow. No code change is needed.
-- Verified locally: `npm run check` passes, production build succeeds, and all routes/assets work under `http://127.0.0.1:4321/index/`.
+- GitHub Pages is enabled with source `GitHub Actions`; deployment run #2 succeeded.
+- The first run failed because the workflow token cannot create the initial Pages site; Pages must be enabled manually in Settings before the first deploy.
+- Public verification: homepage, blog, projects, tags, about, contact, RSS, sitemap, and favicon all return 200; canonical URL is `https://othinusg.github.io/index/`.
+- Local verification: `npm run check` passes, production build succeeds, and all routes/assets work under `http://127.0.0.1:4321/index/`.
 
 ## External resources
 
