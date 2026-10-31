@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  schedule:
+    # 09:17 Asia/Shanghai; avoid the top-of-hour scheduler peak
+    - cron: '17 1 * * *'
   workflow_dispatch:
 
 permissions:

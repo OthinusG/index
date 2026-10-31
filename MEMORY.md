@@ -14,6 +14,7 @@
 
 - Package manager: npm; commit `package-lock.json`.
 - GitHub Actions builds with Node 24, runs `astro check`, builds, and deploys the `dist/` artifact.
+- The workflow also runs daily at 01:17 UTC (09:17 Asia/Shanghai) to rebuild and redeploy the site.
 - GitHub Pages source must be `GitHub Actions`.
 - Remote repository: `https://github.com/OthinusG/index.git`.
 - GitHub Pages has not been enabled yet. Workflow run `41173101316` failed at `Configure Pages` with `Resource not accessible by integration`; the workflow token cannot create the initial Pages site.

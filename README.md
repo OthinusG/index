@@ -38,7 +38,7 @@ npm run preview
 
 ## Deployment
 
-Pushes to `main` trigger `.github/workflows/deploy.yml`. In the repository settings, GitHub Pages must use `GitHub Actions` as its source.
+Pushes to `main` trigger `.github/workflows/deploy.yml`, and the workflow also rebuilds and redeploys every day at 09:17 Asia/Shanghai. In the repository settings, GitHub Pages must use `GitHub Actions` as its source.
 
 ## Theme
 
