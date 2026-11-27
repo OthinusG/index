@@ -10,7 +10,7 @@
 - The Projects and Vibe modules are enabled. The Media module was disabled because there is no content yet; re-enable it in `navfolio.config.ts` and add the nav link in `src/config/site.toml` if needed.
 - Comments are disabled (`[config.comments]`); search is enabled.
 - The site UI language is English (`config.theme.lang = "en"`).
-- Profile email is a GitHub noreply placeholder (`26951345+OthinusG@users.noreply.github.com`); replace it with a real address in `src/config/site.toml` before relying on it.
+- Profile email is `wqin20121@gmail.com` in `src/config/site.toml` (profile and homepage contact link); keep both entries in sync if it changes.
 - The old Dante content was migrated to the Navfolio content model; slugs were kept where possible (`welcome`, `personal-site`). The old `/contact` page was dropped; contact links live on the homepage.
 - The upstream docs submodule (`src/docs`) is intentionally not used; content builds from `src/content`.
 - On 2026-11-27 the site gained curated Projects, Research, and Media sections. Top navigation is Home, Blog, Projects, Research, Media, About; the Vibe route stays enabled but is reached from About instead of the top bar.

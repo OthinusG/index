@@ -121,7 +121,7 @@ comment = true
 name = "OthinusG"
 handle = "@OthinusG"
 role = "Materials chemistry PhD · Independent developer"
-email = "26951345+OthinusG@users.noreply.github.com"
+email = "wqin20121@gmail.com"
 website = "https://othinusg.github.io/index/"
 github = "https://github.com/OthinusG"
 avatar = "/images/avatar.png"
@@ -208,7 +208,7 @@ copy = false
 [[config.home.links]]
 label = "Email"
 icon = "mail"
-tooltip = "26951345+OthinusG@users.noreply.github.com"
+tooltip = "wqin20121@gmail.com"
 copy = true
 
 [[config.home.doing]]
