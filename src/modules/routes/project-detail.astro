@@ -1,6 +1,9 @@
 ---
 import { getCollection, render } from 'astro:content';
+import { ExternalLink, Github } from 'lucide-astro';
 import BlogArticle from '../../layouts/BlogArticle.astro';
+import { getSiteConfig } from '../../data/site';
+import { getI18n } from '../../utils/ui-text';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects', ({ id, data }) => id !== 'index' && !data.draft);
@@ -13,6 +16,8 @@ export async function getStaticPaths() {
 
 const project = Astro.props;
 const { Content, headings } = await render(project);
+const links = project.data.links ?? [];
+const i18n = getI18n(await getSiteConfig());
 ---
 
 <BlogArticle
@@ -20,5 +25,59 @@ const { Content, headings } = await render(project);
   headings={headings}
   sidebar={{ enable: false, ...project.data.sidebar }}
 >
+  {
+    links.length > 0 && (
+      <nav class="project-links" aria-label={i18n.t('projects.linksLabel')}>
+        {links.map((link) => (
+          <a class="project-link" href={link.href} target="_blank" rel="noopener noreferrer">
+            {link.kind === 'github' ? (
+              <Github size={15} strokeWidth={1.75} aria-hidden="true" />
+            ) : (
+              <ExternalLink size={15} strokeWidth={1.75} aria-hidden="true" />
+            )}
+            <span>{link.label}</span>
+          </a>
+        ))}
+      </nav>
+    )
+  }
   <Content />
 </BlogArticle>
+
+<style>
+  .project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 26px;
+  }
+
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px;
+    border: 1px solid var(--paper-line);
+    border-radius: 999px;
+    color: var(--paper-ink-soft);
+    font-family: var(--font-ui-label);
+    font-size: 0.78rem;
+    line-height: 1.4;
+    text-decoration: none;
+    transition:
+      color 160ms ease,
+      border-color 160ms ease,
+      background 160ms ease;
+  }
+
+  .project-link:hover {
+    color: var(--paper-accent);
+    border-color: var(--paper-line-strong);
+    background: var(--paper-control-hover);
+  }
+
+  .project-link:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--paper-accent) 28%, transparent);
+    outline-offset: 2px;
+  }
+</style>

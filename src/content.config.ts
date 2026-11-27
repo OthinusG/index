@@ -427,8 +427,6 @@ const siteConfig = defineCollection({
           heatmapWeeks: z.number().int().positive().default(24),
           showHeatmapLatest: z.boolean().optional().default(true),
           excludeDraft: z.boolean().optional().default(true),
-          startDate: z.string().optional().default(''),
-          dateArchiveBaseHref: z.string().optional().default(''),
         })
         .optional()
         .default({
@@ -436,8 +434,6 @@ const siteConfig = defineCollection({
           heatmapWeeks: 24,
           showHeatmapLatest: true,
           excludeDraft: true,
-          startDate: '',
-          dateArchiveBaseHref: '',
         }),
       navigation: z.array(navigationItemSchema),
       links: z.array(homeLinkSchema).optional().default([]),

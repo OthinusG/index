@@ -23,7 +23,7 @@ type RawUiText = {
     recently: string;
   };
   heatmap: {
-    totalPosts: string;
+    totalContributions: string;
     activeDays: string;
     dayStreak: string;
     latest: string;
@@ -32,10 +32,9 @@ type RawUiText = {
     less: string;
     more: string;
     weekdays: string[];
-    writingSince: Message;
     recentWeeks: Message;
-    upcoming: string;
-    postCount: Message;
+    contributionsOn: Message;
+    noContributionsOn: Message;
   };
   groups: {
     categories: string;
@@ -121,12 +120,12 @@ export type UiLanguage = keyof typeof rawUiText;
 export type UiText = Omit<RawUiText, 'heatmap' | 'groups' | 'article' | 'pagination'> & {
   heatmap: Omit<
     RawUiText['heatmap'],
-    'openLatestPost' | 'writingSince' | 'recentWeeks' | 'postCount'
+    'openLatestPost' | 'contributionsOn' | 'noContributionsOn' | 'recentWeeks'
   > & {
     openLatestPost: (title: string) => string;
-    writingSince: (date: string) => string;
     recentWeeks: (weeks: number) => string;
-    postCount: (count: number) => string;
+    contributionsOn: (count: number, date: string) => string;
+    noContributionsOn: (date: string) => string;
   };
   groups: Omit<
     RawUiText['groups'],
@@ -189,9 +188,9 @@ function createUiText(raw: RawUiText): UiText {
     heatmap: {
       ...raw.heatmap,
       openLatestPost: (title) => formatMessage(raw.heatmap.openLatestPost, { title }),
-      writingSince: (date) => formatMessage(raw.heatmap.writingSince, { date }),
       recentWeeks: (weeks) => formatMessage(raw.heatmap.recentWeeks, { weeks }),
-      postCount: (count) => formatMessage(raw.heatmap.postCount, { count }),
+      contributionsOn: (count, date) => formatMessage(raw.heatmap.contributionsOn, { count, date }),
+      noContributionsOn: (date) => formatMessage(raw.heatmap.noContributionsOn, { date }),
     },
     groups: {
       ...raw.groups,

@@ -4,7 +4,7 @@
     "recently": "Recently"
   },
   "heatmap": {
-    "totalPosts": "Total posts",
+    "totalContributions": "Contributions",
     "activeDays": "Active days",
     "dayStreak": "Day streak",
     "latest": "Latest",
@@ -13,13 +13,12 @@
     "less": "Less",
     "more": "More",
     "weekdays": ["Mon", "Wed", "Fri"],
-    "writingSince": "Writing activity since {date}",
-    "recentWeeks": "Recent {weeks} weeks writing activity",
-    "upcoming": "upcoming",
-    "postCount": {
-      "one": "{count} post",
-      "other": "{count} posts"
-    }
+    "recentWeeks": "GitHub contributions in the last {weeks} weeks",
+    "contributionsOn": {
+      "one": "{count} contribution on {date}",
+      "other": "{count} contributions on {date}"
+    },
+    "noContributionsOn": "No contributions on {date}"
   },
   "groups": {
     "categories": "Categories",

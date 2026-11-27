@@ -4,7 +4,7 @@
     "recently": "最近"
   },
   "heatmap": {
-    "totalPosts": "总文章",
+    "totalContributions": "贡献数",
     "activeDays": "活跃天数",
     "dayStreak": "连续天数",
     "latest": "最新",
@@ -13,10 +13,9 @@
     "less": "少",
     "more": "多",
     "weekdays": ["周一", "周三", "周五"],
-    "writingSince": "自 {date} 起的写作活动",
-    "recentWeeks": "最近 {weeks} 周写作活动",
-    "upcoming": "未来",
-    "postCount": "{count} 篇文章"
+    "recentWeeks": "最近 {weeks} 周的 GitHub 贡献",
+    "contributionsOn": "{date} 有 {count} 次贡献",
+    "noContributionsOn": "{date} 无贡献"
   },
   "groups": {
     "categories": "分类",

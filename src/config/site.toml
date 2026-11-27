@@ -172,8 +172,6 @@ count = 1
 heatmapWeeks = 24
 showHeatmapLatest = true
 excludeDraft = true
-startDate = ""
-dateArchiveBaseHref = ""
 
 [[config.home.navigation]]
 icon = "briefcase"

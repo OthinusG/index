@@ -2,7 +2,8 @@
 import { getCollection } from 'astro:content';
 import Icon from '../Icon.astro';
 import { getSiteConfig } from '../../data/site';
-import { createRecentBlogHeatmap, type HeatmapDay } from '../../utils/blog-heatmap';
+import { sortByDateDesc } from '../../utils/content-dates';
+import { createGitHubHeatmap, type HeatmapDay } from '../../utils/github-heatmap';
 import { getUiText } from '../../utils/ui-text';
 
 interface Props {
@@ -10,20 +11,18 @@ interface Props {
   showLatest?: boolean;
   latestCount?: number;
   excludeDraft?: boolean;
-  dateArchiveBaseHref?: string;
-  startDate?: Date | string | null;
 }
 
-const {
-  weeks = 24,
-  showLatest = true,
-  latestCount = 1,
-  excludeDraft = true,
-  dateArchiveBaseHref,
-  startDate,
-} = Astro.props;
+const { weeks = 24, showLatest = true, latestCount = 1, excludeDraft = true } = Astro.props;
 const posts = await getCollection('blog', ({ data }) => !excludeDraft || !data.draft);
-const heatmap = createRecentBlogHeatmap(posts, weeks, latestCount, startDate);
+const heatmap = createGitHubHeatmap(weeks);
+const latestPosts = sortByDateDesc(posts)
+  .slice(0, Math.max(1, latestCount))
+  .map((post) => ({
+    title: post.data.title,
+    href: `/blog/${post.id}/`,
+    date: post.data.date,
+  }));
 const ui = getUiText(await getSiteConfig());
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -41,42 +40,26 @@ function withBase(href: string | undefined) {
 
   return `${basePath}${href.startsWith('/') ? href : `/${href}`}`;
 }
-const heatmapLabel = startDate
-  ? ui.heatmap.writingSince(heatmap.startDate)
-  : ui.heatmap.recentWeeks(heatmap.weeks);
+
+const heatmapLabel = ui.heatmap.recentWeeks(heatmap.weeks);
 const formatDate = new Intl.DateTimeFormat(ui.locale, {
   month: 'short',
   day: 'numeric',
   year: 'numeric',
 });
 
-function getPostLabel(count: number) {
-  return ui.heatmap.postCount(count);
-}
-
 function getDayTitle(day: HeatmapDay) {
-  if (day.isFuture) return `${day.date}: ${ui.heatmap.upcoming}`;
-
-  const titleLines = day.posts.slice(0, 5).map((post) => `- ${post.title}`);
-  const overflowLine = day.posts.length > 5 ? ['...'] : [];
-
-  return [`${day.date}: ${getPostLabel(day.count)}`, ...titleLines, ...overflowLine].join('\n');
-}
-
-function getDayHref(day: HeatmapDay) {
-  if (dateArchiveBaseHref && day.count > 0) {
-    return withBase(`${dateArchiveBaseHref.replace(/\/$/, '')}/${day.date}/`);
-  }
-
-  return withBase(day.posts[0]?.href);
+  return day.count === 0
+    ? ui.heatmap.noContributionsOn(day.date)
+    : ui.heatmap.contributionsOn(day.count, day.date);
 }
 ---
 
 <article class="glass-card heatmap-card">
   <div class="stats-row">
     <div class="stat-item">
-      <strong>{heatmap.totalPosts}</strong>
-      <span>{ui.heatmap.totalPosts}</span>
+      <strong>{heatmap.totalContributions}</strong>
+      <span>{ui.heatmap.totalContributions}</span>
     </div>
     <div class="stat-item">
       <strong>{heatmap.activeDays}</strong>
@@ -88,67 +71,54 @@ function getDayHref(day: HeatmapDay) {
     </div>
   </div>
 
-  {showLatest && heatmap.latestPosts.length > 0 && (
-    <aside class="latest-tip" aria-label={ui.heatmap.latestPublishedPosts}>
-      <strong>{ui.heatmap.latest}</strong>
-      <div class="latest-list">
-        {heatmap.latestPosts.map((post) => (
-          <a
-            class="latest-link"
-            href={withBase(post.href)}
-            aria-label={ui.heatmap.openLatestPost(post.title)}
-          >
-            <em>{post.title}</em>
-            <time datetime={post.date.toISOString()}>{formatDate.format(post.date)}</time>
-            <span class="latest-icon" aria-hidden="true">
-              <Icon name="external" size={15} />
-            </span>
-          </a>
-        ))}
-      </div>
-    </aside>
-  )}
+  {
+    showLatest && latestPosts.length > 0 && (
+      <aside class="latest-tip" aria-label={ui.heatmap.latestPublishedPosts}>
+        <strong>{ui.heatmap.latest}</strong>
+        <div class="latest-list">
+          {latestPosts.map((post) => (
+            <a
+              class="latest-link"
+              href={withBase(post.href)}
+              aria-label={ui.heatmap.openLatestPost(post.title)}
+            >
+              <em>{post.title}</em>
+              <time datetime={post.date.toISOString()}>{formatDate.format(post.date)}</time>
+              <span class="latest-icon" aria-hidden="true">
+                <Icon name="external" size={15} />
+              </span>
+            </a>
+          ))}
+        </div>
+      </aside>
+    )
+  }
 
   <div class="rhythm-grid" aria-label={heatmapLabel}>
     <div class="weekday-column" aria-hidden="true">
-      {ui.heatmap.weekdays.map((weekday) => (
-        <span>{weekday}</span>
-      ))}
+      {ui.heatmap.weekdays.map((weekday) => <span>{weekday}</span>)}
     </div>
 
     <div class="heatmap-cells" style={`--week-count: ${heatmap.weeks};`}>
-      {heatmap.days.map((day) => {
-        if (day.isFuture) {
-          return <span class="heatmap-cell future-cell" aria-hidden="true" />;
-        }
-
-        const href = getDayHref(day);
-        const content = (
-          <span
-            class={`heatmap-cell level-${day.level}`}
-            title={getDayTitle(day)}
-            aria-hidden="true"
-          />
-        );
-
-        return href ? (
-          <a class="cell-link" href={href} aria-label={getDayTitle(day)}>
-            {content}
-          </a>
-        ) : (
-          <span class="cell-link static-cell" aria-label={getDayTitle(day)}>
-            {content}
-          </span>
-        );
-      })}
+      {
+        heatmap.days.map((day) =>
+          day.isFuture ? (
+            <span class="heatmap-cell future-cell" aria-hidden="true" />
+          ) : (
+            <span
+              class={`heatmap-cell level-${day.level}`}
+              title={getDayTitle(day)}
+              aria-hidden="true"
+            />
+          ),
+        )
+      }
     </div>
   </div>
 
   <footer>
     <span>{ui.heatmap.less}</span>
-    {[0, 1, 2, 3, 4].map((level) => (
-      <i class={`heatmap-cell level-${level}`} />
-    ))}
+    {[0, 1, 2, 3, 4].map((level) => <i class={`heatmap-cell level-${level}`} />)}
     <span>{ui.heatmap.more}</span>
   </footer>
 </article>
@@ -171,9 +141,9 @@ function getDayHref(day: HeatmapDay) {
   }
 
   .stats-row {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
   }
 
   .stat-item {
@@ -191,7 +161,7 @@ function getDayHref(day: HeatmapDay) {
   .stat-item span {
     overflow: hidden;
     color: var(--paper-ink-soft);
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     line-height: 1.2;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -319,27 +289,12 @@ function getDayHref(day: HeatmapDay) {
     max-width: 100%;
   }
 
-  .heatmap-cell,
-  .cell-link {
+  .heatmap-cell {
     display: block;
     width: var(--cell-size);
     height: var(--cell-size);
     min-width: 8px;
     min-height: 8px;
-  }
-
-  .cell-link {
-    position: relative;
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .cell-link:hover .heatmap-cell {
-    outline: 1px solid var(--paper-line-strong);
-    outline-offset: 1px;
-  }
-
-  .heatmap-cell {
     border-radius: 2.5px;
     background: rgba(102, 125, 109, 0.12);
     box-shadow: inset 0 0 0 1px var(--paper-line);
@@ -413,8 +368,7 @@ function getDayHref(day: HeatmapDay) {
       max-width: 360px;
     }
 
-    .heatmap-cells .heatmap-cell,
-    .heatmap-cells .cell-link {
+    .heatmap-cells .heatmap-cell {
       width: 100%;
       height: auto;
       min-width: 0;

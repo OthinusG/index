@@ -11,6 +11,8 @@
 - Comments are disabled (`[config.comments]`); search is enabled.
 - The site UI language is English (`config.theme.lang = "en"`).
 - Profile email is `wqin20121@gmail.com` in `src/config/site.toml` (profile and homepage contact link); keep both entries in sync if it changes.
+- The homepage heatmap shows public GitHub contributions, not blog post counts. `scripts/sync-github-contributions.ts` parses GitHub's public contributions page at build time into `src/data/github-contributions.json`; if the sync fails, the committed snapshot is kept and the build continues.
+- Project detail pages render frontmatter `links` as pill links via `src/modules/routes/project-detail.astro`; new projects only need `links` in frontmatter.
 - The old Dante content was migrated to the Navfolio content model; slugs were kept where possible (`welcome`, `personal-site`). The old `/contact` page was dropped; contact links live on the homepage.
 - The upstream docs submodule (`src/docs`) is intentionally not used; content builds from `src/content`.
 - On 2026-11-27 the site gained curated Projects, Research, and Media sections. Top navigation is Home, Blog, Projects, Research, Media, About; the Vibe route stays enabled but is reached from About instead of the top bar.
@@ -22,7 +24,7 @@
 
 ## Deployment
 
-- Workflow: `.github/workflows/deploy-pages.yml` on pushes to `main` and manual dispatch.
+- Workflow: `.github/workflows/deploy-pages.yml` on pushes to `main`, a daily 01:17 UTC (09:17 Asia/Shanghai) schedule, and manual dispatch.
 - Node 22, Bun, and `python -m pip install --user fonttools brotli` are required in CI.
 - GitHub Pages source is `GitHub Actions`; the site is a project page under `/index/`.
 - Remote repository: `https://github.com/OthinusG/index.git`.
