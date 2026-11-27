@@ -9,6 +9,18 @@ updates:
         applies-to: 'version-updates'
         patterns:
           - '*'
+    ignore:
+      # Astro 7.4 dropped the bundled @astrojs/markdown-remark that this site's
+      # remark plugin config depends on; pin Astro minors until the markdown
+      # pipeline is migrated.
+      - dependency-name: 'astro'
+        update-types: ['version-update:semver-minor']
+      # KaTeX is pre-1.0, so 0.x minor bumps can change rendering behavior.
+      - dependency-name: 'katex'
+        update-types: ['version-update:semver-minor']
+      # Major upgrades require a manual migration and a full build.
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
