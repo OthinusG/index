@@ -1,0 +1,21 @@
+---
+import { getEntry, render } from 'astro:content';
+import BlogArticle from '../layouts/BlogArticle.astro';
+
+const entry = await getEntry('pages', 'research');
+
+if (!entry) {
+  throw new Error('Missing src/content/pages/research.mdx content entry.');
+}
+
+const { Content, headings } = await render(entry);
+---
+
+<BlogArticle
+  post={entry}
+  headings={headings}
+  sidebar={{ enable: false, ...entry.data.sidebar }}
+  contentFont="ui"
+>
+  <Content />
+</BlogArticle>

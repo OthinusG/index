@@ -4,12 +4,12 @@ description: A lightweight Astro site for notes, projects, and experiments, depl
 date: 2026-10-31
 icon: code-2
 links:
+  - label: Website
+    href: https://othinusg.github.io/index/
+    kind: website
   - label: Source
     href: https://github.com/OthinusG/index
     kind: github
-  - label: Live site
-    href: https://othinusg.github.io/index/
-    kind: website
 ---
 
 This is the site you are reading now: a content-first personal notebook built with [Astro](https://astro.build/) and [Navfolio](https://github.com/dodolalorc/astro-navfolio).

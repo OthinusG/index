@@ -74,8 +74,8 @@ note = "Connected notes that can be followed in the order they were written."
 [config.pages.projects]
 title = "Projects"
 kicker = "Project shelf"
-subtitle = "Small tools and site systems."
-note = "A compact shelf for implementation choices, releases, and publishing experiments."
+subtitle = "Tools, game mods, and localization."
+note = "Independent software, research tools, game mods, and localization work."
 
 [config.pages.vibe]
 title = "vibe"
@@ -85,9 +85,9 @@ note = "Not formal enough for blog posts, but still part of the story."
 showTrail = true
 
 [config.pages.media]
-title = "书影音"
-subtitle = "读过、看过、听过的作品，以及一点当时的感受。"
-note = "一页浏览书、电影、剧集、专辑与播客。"
+title = "Media"
+subtitle = "Games, anime, screen works, and books."
+note = "A selected shelf from my Bangumi collection."
 
 [config.comments.giscus]
 repo = ""
@@ -139,8 +139,12 @@ label = "Projects"
 module = "projects"
 
 [[config.topNav.links]]
-label = "Vibe"
-module = "vibe"
+label = "Research"
+href = "/research"
+
+[[config.topNav.links]]
+label = "Media"
+href = "/media"
 
 [[config.topNav.links]]
 label = "About"
@@ -159,9 +163,8 @@ text = [
 title = "I'm OthinusG"
 name = "OthinusG"
 body = [
-  "I study materials chemistry and build software on the side.",
-  "This site collects research notes, technical write-ups, and project updates.",
-  "It is a small, durable place for what I learn and ship.",
+  "I study materials chemistry and build independent software.",
+  "This site collects publications, projects, notes, and a small shelf of games, screen works, and books.",
 ]
 
 [config.home.latest]
@@ -173,22 +176,22 @@ startDate = ""
 dateArchiveBaseHref = ""
 
 [[config.home.navigation]]
-icon = "pen"
-title = "Blog"
-subtitle = "Notes, write-ups, and field reports"
-href = "/blog"
-
-[[config.home.navigation]]
 icon = "briefcase"
 title = "Projects"
-subtitle = "Things I build and maintain"
+subtitle = "Tools, game mods, and localization"
 href = "/projects"
 
 [[config.home.navigation]]
-icon = "github"
-title = "Open Source"
-subtitle = "Code and experiments"
-href = "https://github.com/OthinusG"
+icon = "book-open-check"
+title = "Research"
+subtitle = "Polymer membranes and porous materials"
+href = "/research"
+
+[[config.home.navigation]]
+icon = "book"
+title = "Media"
+subtitle = "Games, anime, screen works, and books"
+href = "/media"
 
 [[config.home.links]]
 label = "GitHub"
