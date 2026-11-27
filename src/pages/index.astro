@@ -1,42 +1,49 @@
 ---
-import { getCollection } from 'astro:content';
-import Button from '../components/Button.astro';
-import Hero from '../components/Hero.astro';
-import PostPreview from '../components/PostPreview.astro';
-import ProjectPreview from '../components/ProjectPreview.astro';
-import siteConfig from '../data/site-config';
+import IntroCard from '../components/cards/IntroCard.astro';
+import ConnectCard from '../components/cards/ConnectCard.astro';
+import NavigationCard from '../components/cards/NavigationCard.astro';
+import ProfileCard from '../components/cards/ProfileCard.astro';
+import DashboardFlow from '../components/layout/DashboardFlow.astro';
+import BlogHeatmap from '../components/widgets/BlogHeatmap.astro';
+import DoingCard from '../components/widgets/DoingCard.astro';
+import { getSiteConfig } from '../data/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { sortItemsByDateDesc } from '../utils/data-utils';
 
-const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
-const featuredPosts = posts.filter(({ data }) => data.isFeatured);
-
-const projects = (await getCollection('projects')).sort(sortItemsByDateDesc);
-const featuredProjects = projects.filter(({ data }) => data.isFeatured);
+const { home, profile, site } = await getSiteConfig();
 ---
 
-<BaseLayout description={siteConfig.description}>
-    <Hero {...siteConfig.hero} />
-    {featuredProjects?.length > 0 && (
-        <div class="mb-16 sm:mb-24">
-            <h2 class="mb-12 font-serif text-xl italic sm:mb-16 sm:text-2xl">Projects</h2>
-            {featuredProjects.map((project) => (
-                <ProjectPreview project={project} class="mb-10 sm:mb-12" headingLevel="h3" />
-            ))}
-            <div class="mt-12 sm:mt-16">
-                <Button href="/projects">View All Projects</Button>
-            </div>
-        </div>
-    )}
-    {featuredPosts?.length > 0 && (
-        <div class="mb-16 sm:mb-24">
-            <h2 class="mb-12 font-serif text-xl italic sm:mb-16 sm:text-2xl">Writing</h2>
-            {featuredPosts.map((post) => (
-                <PostPreview post={post} class="mb-10 sm:mb-12" headingLevel="h3" />
-            ))}
-            <div class="mt-12 sm:mt-16">
-                <Button href="/blog">View All Posts</Button>
-            </div>
-        </div>
-    )}
+<BaseLayout title={site.pageTitle} description={site.pageDescription}>
+  <div class="publication-bg" aria-hidden="true"></div>
+  <DashboardFlow>
+    <Fragment slot="profile">
+      <ProfileCard profile={profile} />
+    </Fragment>
+
+    <Fragment slot="intro">
+      <IntroCard intro={home.intro} quote={home.quote} />
+    </Fragment>
+
+    <Fragment slot="latest">
+      <BlogHeatmap
+        weeks={home.latest.heatmapWeeks}
+        showLatest={home.latest.showHeatmapLatest}
+        latestCount={home.latest.count}
+        excludeDraft={home.latest.excludeDraft}
+        startDate={home.latest.startDate || null}
+        dateArchiveBaseHref={home.latest.dateArchiveBaseHref || undefined}
+      />
+    </Fragment>
+
+    <Fragment slot="navigation">
+      <NavigationCard items={home.navigation} />
+    </Fragment>
+
+    <Fragment slot="connect">
+      <ConnectCard links={home.links} />
+    </Fragment>
+
+    <Fragment slot="doing">
+      <DoingCard items={home.doing} />
+    </Fragment>
+  </DashboardFlow>
 </BaseLayout>

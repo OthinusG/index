@@ -1,48 +1,55 @@
 ---
-import siteConfig from '../data/site-config';
-import { withBase } from '../utils/path-utils';
+import { Compass, Github, Mail } from 'lucide-astro';
+import { getSiteConfig } from '../data/site';
 
-const socialLinks = siteConfig.socialLinks ?? [];
-const navLinks = siteConfig.footerNavLinks ?? [];
-const currentYear = new Date().getFullYear();
+const { profile, site } = await getSiteConfig();
+const year = new Date().getFullYear();
 ---
 
-<footer class="mx-auto w-full max-w-3xl pt-12 pb-10 sm:pt-24 sm:pb-14">
-    {navLinks.length > 0 && (
-        <nav class="mb-4 flex flex-wrap gap-x-6 gap-y-1" aria-label="Footer navigation">
-            {navLinks.map((link) => (
-                <a class="font-serif hover:underline hover:underline-offset-2" href={withBase(link.href)}>
-                    {link.text}
-                </a>
-            ))}
-        </nav>
-    )}
-    <div
-        class:list={[
-            'border-main flex flex-col gap-4 border-t border-dashed pt-6',
-            { 'sm:flex-row-reverse sm:items-center sm:justify-between': socialLinks.length > 0 }
-        ]}
-    >
-        {socialLinks.length > 0 && (
-            <div class="flex flex-wrap gap-x-4 gap-y-1">
-                {socialLinks.map((link) => (
-                    <a
-                        class="inline-flex items-center justify-center text-sm hover:underline hover:underline-offset-2"
-                        href={withBase(link.href)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        {link.text}
-                    </a>
-                ))}
-            </div>
-        )}
-        <p class="text-sm">
-            &copy; {currentYear}{' '}
-            <a class="hover:underline hover:underline-offset-2" href={withBase('/')}>
-                {siteConfig.title}
-            </a>
-            . All rights reserved.
-        </p>
-    </div>
+<footer>
+  &copy; {year}
+  {site.title}. {site.footerNote}
+  <div class="social-links">
+    <a href={profile.website} target="_blank" rel="noreferrer">
+      <span class="sr-only">Open website</span>
+      <Compass size={18} stroke-width={1.9} aria-hidden="true" focusable="false" />
+    </a>
+    <a href={profile.github} target="_blank" rel="noreferrer">
+      <span class="sr-only">Open GitHub profile</span>
+      <Github size={18} stroke-width={1.9} aria-hidden="true" focusable="false" />
+    </a>
+    <a href={`mailto:${profile.email}`}>
+      <span class="sr-only">Email</span>
+      <Mail size={18} stroke-width={1.9} aria-hidden="true" focusable="false" />
+    </a>
+  </div>
 </footer>
+
+<style>
+  footer {
+    padding: 3em 1em 6em;
+    color: var(--paper-ink-faint);
+    font-size: 0.88rem;
+    text-align: center;
+  }
+
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-top: 1em;
+  }
+
+  .social-links a {
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    color: var(--paper-ink-soft);
+    text-decoration: none;
+  }
+
+  .social-links a:hover {
+    color: var(--paper-accent);
+  }
+</style>

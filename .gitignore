@@ -5,6 +5,7 @@ dist/
 
 # dependencies
 node_modules/
+.venv/
 
 # logs
 npm-debug.log*
@@ -19,3 +20,11 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# jetbrains setting folder
+.idea/
+
+# generated font files
+scripts/fonts/ui-chars.txt
+public/fonts/*-subset.woff2
+public/friend-circle.json
